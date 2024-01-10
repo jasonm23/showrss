@@ -5,6 +5,10 @@ import configparser
 import hashlib
 import os.path
 import feedparser
+from datetime import datetime
+
+def log(message):
+    print(f"{datetime.now().isoformat()}: {message}")
 
 # Settings.
 config_file = os.path.expanduser("~/.showrss")
@@ -27,7 +31,7 @@ except:
 if not quality in ["default", "standard", "high", "all"]:
     exit("Unknown quality setting '%s'.\nMust be one of 'default', 'standard', 'high' or 'all'." % quality)
 
-print("Checking for new shows")
+log("Checking for new shows")
 
 # Load the cache.
 cachefile = os.path.expanduser("~/.showrss_cache")
@@ -61,7 +65,7 @@ for item in feed['items']:
     try:
         cache.get("entries", key)
     except:
-        print("Downloading '%s'..." % title)
+        log("Downloading '%s'..." % title)
         if (notifier):
             subprocess.check_call(notifier + [title.encode('ascii', 'ignore')])
         try:
@@ -72,4 +76,4 @@ for item in feed['items']:
                 outputfile.close()
                 shows.append(title)
         except Exception as e:
-            print("Unable to download '%s'" % torrent)
+            log("Unable to download '%s'" % torrent)
