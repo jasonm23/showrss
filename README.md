@@ -1,10 +1,13 @@
-showrss
-=======
+> This is a hard fork from jbmorely/showrss 
+> Intended for personal use only (i.e. no support is offered, but use it if you like.)
 
-Fetch new torrents for a specific ShowRSS user and kick-off a download.
+# Showrss
 
-Requirements
-------------
+Fetch the latest links from a ShowRSS feed, and add them to a torrent client.
+
+Added magnets are cached in `~/.showrss_cache`
+
+# Requirements
 
 Install the requirements:
 
@@ -12,45 +15,20 @@ Install the requirements:
 pip install -r requirements.txt --use-mirrors
 ```
 
-### Running under virtualenv
-
-If you do not wish to install your requirements globally, you can create a virtualenv for running showrss. This can be done as follows:
-
-From the folder:
-
-```bash
-virtualenv --no-site-packages showrss-venv
-```
-
-To get into the virtualenv, source the activate script:
-
-```bash
-source ./showrss-venv/bin/activate
-```
-    
-Install the requirements into the venv (see requirements.txt below):
-
-```bash
-pip install -r requirements.txt --use-mirrors
-```
-
-Run the thing:
+Run:
 
 ```bash
 python showrss.py
 ```
 
-Configuration
--------------
+# Configuration
 
 `showrss` expects to find a configuration file at `~/.showrss`:
 
 ```ini
 [default]
-
 user_id = 12345
 command = transmission-remote -a
-notifier = /usr/bin/terminal-notifier -title ShowRSS -message
 quality = default
 ```
 
@@ -91,32 +69,6 @@ The desired show quality. May be one of:
 - `high` - Only 720p HD torrents
 - `all` - Both types of torrents
 
-### notifier (optional)
+# License
 
-The command-line for providing notifications of torrent downloads. The notification message is passed as the last argument.
-
-For example, notifications can be posted to the Notification Center on OS X by using `terminal-notifier`:
-
-```ini
-notifier = /usr/bin/terminal-notifier -title ShowRSS -message
-```
-
-Changelog
----------
-
-Version 1.0.2, 10/12/2014
-
-- FIX: The `notifier` configuration parameter is now optional as described in the readme.
-
-Version 1.0.1, November 2014
-
-- Adding support for different quality torrents.
-
-Version 1.0.0, June 2014
-
-- Initial release.
-
-License
--------
-
-showrss is available under the MIT license. See the LICENSE file for more info.
+`showrss` is available under the MIT license. See the LICENSE file for more info.

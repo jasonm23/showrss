@@ -1,21 +1,14 @@
 #!/usr/bin/env python
 
 import subprocess
-import ConfigParser
-import md5
-import syslog
+import configparser
+import hashlib
 import os.path
-
 import feedparser
-
-def log(level, message, console=True):
-    if console:
-        print message.encode('ascii', 'ignore')
-    syslog.syslog(level, message.encode('ascii', 'ignore'))
 
 # Settings.
 config_file = os.path.expanduser("~/.showrss")
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(config_file)
 user_id = config.get("default", "user_id")
 command = config.get("default", "command").split(" ")
@@ -34,12 +27,11 @@ except:
 if not quality in ["default", "standard", "high", "all"]:
     exit("Unknown quality setting '%s'.\nMust be one of 'default', 'standard', 'high' or 'all'." % quality)
 
-# Logging.
-log(syslog.LOG_INFO, "Checking for new shows", False)
+print("Checking for new shows")
 
 # Load the cache.
 cachefile = os.path.expanduser("~/.showrss_cache")
-cache = ConfigParser.ConfigParser()
+cache = configparser.ConfigParser()
 cache.read(cachefile)
 
 # Convert the quality setting to the correct parameter.
@@ -63,13 +55,13 @@ for item in feed['items']:
 
     title = item['title']
     identifier = item['id']
-    key = md5.new(identifier).hexdigest()
+    key = identifier
     torrent = item['links'][0]['href']
     
     try:
         cache.get("entries", key)
     except:
-        log(syslog.LOG_INFO, "Downloading '%s'..." % title)
+        print("Downloading '%s'..." % title)
         if (notifier):
             subprocess.check_call(notifier + [title.encode('ascii', 'ignore')])
         try:
@@ -80,4 +72,4 @@ for item in feed['items']:
                 outputfile.close()
                 shows.append(title)
         except Exception as e:
-            log(syslog.LOG_INFO, "Unable to download '%s'" % torrent)
+            print("Unable to download '%s'" % torrent)
